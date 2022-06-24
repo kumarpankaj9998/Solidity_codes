@@ -1,0 +1,27 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.7;//stable version
+
+contract SimpleStorage{
+     uint256 public favoriteNumber;//initilized to zero
+
+     struct People{
+         uint256 favoriteNumber;
+         string name;
+     }
+     People[] public people; 
+    People public obj1= People({favoriteNumber:3,name:"pankaj"});
+
+     function store(uint256 _newFavoriteNumber) public {
+
+         favoriteNumber=_newFavoriteNumber;
+     }    
+
+     function addPerson(string memory  _name,uint256 _newFavoriteNumber ) public{
+
+         People memory person= People({name:_name,favoriteNumber:_newFavoriteNumber});
+         people.push(person);
+     }
+   
+}
+
+
