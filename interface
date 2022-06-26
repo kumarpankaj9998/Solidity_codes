@@ -1,0 +1,46 @@
+//SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.8;
+
+import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+
+contract FundMe{
+    uint256 public minimumUsd=50*1e18;
+    
+    address[] public funders;
+
+    mapping(address=>uint256)public addressToAmontFunded;
+
+    function fund() public payable{
+
+         require(getConversionRate(msg.value)>minimumUsd,"Didn't have enough funds");
+         funders.push(msg.sender);
+         addressToAmontFunded[msg.sender]=msg.value;
+          }
+
+        function getPrice() public view returns(uint256) {
+                //ABI
+                // address 0x8A753747A1Fa494EC906cE90E9f37563A8AF630e
+                 AggregatorV3Interface priceFeed= AggregatorV3Interface(0x8A753747A1Fa494EC906cE90E9f37563A8AF630e);\
+                 (,int price,,,)=priceFeed.latestRoundData();
+                  
+                 returns uint256(price*1e10)//cuz price will 8th decimal and wei is of 18th decimal
+
+        }
+
+        function getConversionRate(uint256 ethAmt) public view returns (uint256){
+ 
+            uint256 ethprice= getPrice();
+            uint256 ethAmtInUsd= (ethprice*ethAmt)/1e18;
+
+            returns ethAmtInUsd;
+
+        }
+       
+    // function getVersion() public view returns (uint256){
+    //       AggregatorV3Interface priceFeed= AggregatorV3Interface(0x8A753747A1Fa494EC906cE90E9f37563A8AF630e);
+    //       returns priceFeed.version();
+
+    // }
+   
+}
